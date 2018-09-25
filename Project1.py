@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #adding python file path name
 
 
-#Functions
+#FUNCTIONS
 def my_h_function(x):
 
     output = []
@@ -20,7 +20,6 @@ def my_h_function(x):
 
     return output
 
-#Functions
 def my_g_function(x):
 
     output = []
@@ -31,6 +30,7 @@ def my_g_function(x):
         output.append(val)
 
     return output
+
 
 def plot_scatter(x):
 
@@ -49,8 +49,8 @@ def plot_scatter(x):
     #loop through h(x) values to know which values to highlight 
     for i in range(0,len(h)): 
 
-        #if h(x) >= 0
-        if ( h[i] >= 0):
+        #if h(x) > 0
+        if ( h[i] > 0):
             
             #add coordinate to sample space
             sp_x.append(x[i,0])
@@ -85,13 +85,39 @@ def plot_scatter(x):
     #show plot
     plt.show()
 
+def my_Monte_Carlo(x):
 
-#Exercise
+    #calculate the g and h values 
+        h = my_h_function(x)
+        g = my_g_function(x)
+
+        output = 0
+
+        # loop through all of the sample space values 
+        for i in range(0, (len(h) - 1) ): 
+
+            #if h_val is greater than zero  
+            if ( h[i] > 0):
+
+                #add it's g value to summation
+                output = output + g[i]
+
+        # take summation value time |S|/N
+        output = output * 1
+
+        return output
+
+#Exercise (MAIN)
 
 #1
 x = np.random.rand(1000,2) # a vector of N two - dimensionalcoordinates in the range [0,1]^2
 
 #2
 plot_scatter(x)
+
+#3
+
+I = my_Monte_Carlo(x)
+print(I)
 
 
