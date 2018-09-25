@@ -103,7 +103,7 @@ def my_Monte_Carlo(x):
                 output = output + g[i]
 
         # take summation value time |S|/N
-        output = output * 1
+        output = output / len(x)
 
         return output
 
