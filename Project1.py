@@ -8,6 +8,19 @@ import matplotlib.pyplot as plt
 
 
 #FUNCTIONS
+def my_h2_function(x):
+    
+
+    output = []
+    #loop through all of the vectors
+    for cor in x:
+
+        #calculate value for coordinate and then append it to list
+        val = math.pow(cor[0], 2) + math.pow(cor[1],2)
+        output.append(val)
+
+    return output
+
 def my_h_function(x):
 
     output = []
