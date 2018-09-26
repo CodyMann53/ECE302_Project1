@@ -3,13 +3,10 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 #adding python file path name
-
 
 #FUNCTIONS
 def my_h2_function(x):
-    
 
     output = []
     #loop through all of the vectors
@@ -138,9 +135,10 @@ def my_Monte_Carlo_forCircle(x):
                 output = output + g
 
         # take summation value time |S|/N
-        output = (1/4) * (  (output * math.pi) / len(x) )
+        output = (4 * output )  / len(x) 
 
         return output
+
 #Exercise (MAIN)
 
 #1
@@ -152,7 +150,5 @@ plot_scatter(x)
 #3
 
 I = my_Monte_Carlo(x)
-print(I)
 
-I = my_Monte_Carlo_forCircle(x)
-print(I)
+X = my_Monte_Carlo_forCircle(x)
