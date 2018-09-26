@@ -120,6 +120,27 @@ def my_Monte_Carlo(x):
 
         return output
 
+def my_Monte_Carlo_forCircle(x):
+
+    #calculate the g and h values 
+        h = my_h2_function(x)
+        g = 1
+
+        output = 0
+
+        # loop through all of the sample space values 
+        for i in range(0, (len(h) - 1) ): 
+
+            #if h_val is greater than zero  
+            if ( h[i] < 1):
+
+                #add it's g value to summation
+                output = output + g
+
+        # take summation value time |S|/N
+        output = (1/4) * (  (output * math.pi) / len(x) )
+
+        return output
 #Exercise (MAIN)
 
 #1
@@ -133,4 +154,5 @@ plot_scatter(x)
 I = my_Monte_Carlo(x)
 print(I)
 
-
+I = my_Monte_Carlo_forCircle(x)
+print(I)
