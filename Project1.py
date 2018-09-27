@@ -65,7 +65,7 @@ def plot_scatter(x):
             nonsp_g.append(g[i])
 
     #scatter plot setup
-    fig = plt.figure()
+    fig = plt.figure(0)
     ax = fig.add_subplot(111, projection = '3d')
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
@@ -77,9 +77,8 @@ def plot_scatter(x):
     
     #plot non sample space values 
     ax.scatter(nonsp_x, nonsp_y, nonsp_g, zdir = 'z', s=20, c='b') 
-
-    #show plot
-    plt.show()
+    
+    plt.savefig('Number2.png', bbox_inches='tight')
 
 def my_Monte_Carlo(x):
 
@@ -89,6 +88,15 @@ def my_Monte_Carlo(x):
 
         output = ( g[ h > 0].sum() ) / len(x)
 
+        return output
+
+def my_Monte_Carlo_sq(x):
+
+        #calculate the g and h values
+        h = my_h_function(x)
+        g = my_g_function(x) * my_g_function(x)
+
+        output = ( g[h > 0].sum() / len(x) )
         return output
 
 def my_Monte_Carlo_forCircle(x):
@@ -122,7 +130,7 @@ x = np.random.rand(1000,2) # a vector of N two - dimensionalcoordinates in the r
 plot_scatter(x)
 
 #3
-Z= my_Monte_Carlo(x)
+Z = my_Monte_Carlo(x)
 print("Estimation of I using monte carlo method: ", Z)
 
 #4
@@ -143,7 +151,7 @@ for i in range(0, 500):
 
     #computer monte carlo method and add it to numpy array for taking mean and standard deviation later
     I = np.append(I, my_Monte_Carlo(randNum) )
-i
+
 #take mean and standard deviation of I
 mean = np.mean(I)
 stdev = np.std(I)
@@ -186,5 +194,26 @@ plt.ylabel('estimated integral')
 plt.legend()
 plt.grid(True)
 plt.savefig('Number5.png', bbox_inches='tight')
-plt.show()
-#6
+
+##6
+
+#number of random variables to draw
+N = 100000
+x = np.random.rand(N,2)
+
+#find integral
+V =  my_Monte_Carlo_sq(x) - math.pow(my_Monte_Carlo(x),2)
+
+#apply to plot
+plt.figure(2)
+plt.semilogx(Nset, (V / Nset), label = 'true variance')
+plt.semilogx(Nset, np.var(I,1), 'r', label = 'empirical variance')
+plt.xlabel('number of samples')
+plt.ylabel('variance')
+plt.legend()
+plt.grid(True)
+plt.savefig('Number6.png', bbox_inches='tight')
+
+
+
+
