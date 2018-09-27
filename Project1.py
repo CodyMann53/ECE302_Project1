@@ -127,7 +127,7 @@ def my_Monte_Carlo_forCircle(x):
         # loop through all of the sample space values 
         for i in range(0, (len(h) - 1) ): 
 
-            #if h_val is greater than zero  
+            #if h_val is less than 1 
             if ( h[i] < 1):
 
                 #add it's g value to summation
@@ -154,7 +154,9 @@ print("Estimation of I using monte carlo method: ", Z)
 X = my_Monte_Carlo_forCircle(x)
 print("Estimation of pi using monte carlo method: ", X)
 
-#5 
+#5
+
+#a: Taking mean and standard deviation of I for N = 1000
 I = np.array([])
 
 
@@ -165,12 +167,51 @@ for i in range(0, 500):
     randNum = np.random.rand(1000, 2) 
 
     #computer monte carlo method and add it to numpy array for taking mean and standard deviation later
-    I = np.append(I, my_Monte_Carlo(x) )
-
+    I = np.append(I, my_Monte_Carlo(randNum) )
+i
 #take mean and standard deviation of I
 mean = np.mean(I)
 stdev = np.std(I)
 print("Mean of random variable I: ", mean)
 print("Standard deviation of random variable I: ", stdev)
 
+#b Repeating a but for rand of N
 
+#creating a log scale of N values into a numpy array 
+Nset = np.round(np.logspace(1,5,10))
+
+#converting all floats to int
+Nset = Nset.astype(int)
+
+
+#arrays to hold, I values, stdevs, and means
+I = np.zeros(shape=(10,500), dtype=int)
+I_means = np.zeros(500, dtype=int)
+I_stdev = np.zeros(500, dtype=int)
+
+#looping through N set to compute I, means, and std dev
+for i in range(10):
+
+    # run monte carlo method 500 times with N random variables
+    for trial in range(500):
+
+        #create N random 
+        randNum = np.random.rand(Nset[i], 2)
+
+        #append I value to list
+        I[i,trial] = my_Monte_Carlo(randNum) 
+    
+    #calculate means and standard deviations
+    I_means[i] = np.mean( I[i,:] )
+    I_stdev[i] = np.std( I[i,:] )
+    
+
+plt.figure(1)
+plt.semilogx(Nset, I[:,0], 'kx')
+#plt.semilogx(Nset, n, 'b', label = 'mean')
+#plt.semilogx(Nset, np.mean + np.std(I,1), 'r', label = 'mean +/- std')
+#plt.semilogx(Nset, np.mean(I) - np.std(I,1), 'r')
+plt.xlabel('number of samples')
+plt.ylabel('estimated integral')
+plt.show()
+#6
