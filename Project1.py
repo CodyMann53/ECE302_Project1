@@ -8,35 +8,22 @@ import matplotlib.pyplot as plt
 #FUNCTIONS
 def my_h2_function(x):
 
-    #splitting x and y coordinates apart
-    x_cor = x[:,0]
-    y_cor = x[:,1]
-
-
     #calculate value for coordinate and then append it to list
-    output = np.power(x_cor,2)+ np.power(y_cor,2)
+    output = np.power(x[:,0],2)+ np.power(x[:,1],2)
 
     return output
 
 def my_h_function(x):
 
-    #splitting into x and y coordinates
-    x_cor = x[:,0]
-    y_cor = x[:,1]
-
     #use numpy operations to calculate h function 
-    output = np.power(x_cor, 3) + np.power(y_cor, 2) + 2 * x_cor * y_cor - np.sin(x_cor) + np.cos(2 * np.pi * x_cor * y_cor ) - 1
+    output = np.power(x[:,0], 3) + np.power(x[:,1], 2) + 2 * x[:,0] * x[:,1] - np.sin(x[:,0]) + np.cos(2 * np.pi * x[:,0] * x[:,1] ) - 1
 
     return output
 
 def my_g_function(x):
 
-    #splitting into x and y coordinates
-    x_cor = x[:,0]
-    y_cor = x[:,1]
-    
     #use numpy operations to calculate g function 
-    output = (1 / (2 * np.pi) ) * np.exp( (-1) * (np.power(x_cor, 2) + np.power(y_cor, 2) ) / 2 )
+    output = (1 / (2 * np.pi) ) * np.exp( (-1) * (np.power(x[:,0], 2) + np.power(x[:,1], 2) ) / 2 )
     
     return output
 
@@ -100,19 +87,7 @@ def my_Monte_Carlo(x):
         h = my_h_function(x)
         g = my_g_function(x)
 
-        output = 0
-
-        # loop through all of the sample space values 
-        for i in range(0, (len(h) - 1) ): 
-
-            #if h_val is greater than zero  
-            if ( h[i] > 0):
-
-                #add it's g value to summation
-                output = output + g[i]
-
-        # take summation value time |S|/N
-        output = output / len(x)
+        output = ( g[ h > 0].sum() ) / len(x)
 
         return output
 
@@ -178,20 +153,20 @@ print("Standard deviation of random variable I: ", stdev)
 #b Repeating a but for rand of N
 
 #creating a log scale of N values into a numpy array 
-Nset = np.round(np.logspace(1,5,10))
+Nset = np.round(np.logspace(1,5,100))
 
 #converting all floats to int
 Nset = Nset.astype(int)
 
 
 #arrays to hold, I values, stdevs, and means
-I = np.zeros(shape=(10,500), dtype=int)
-I_means = np.zeros(500, dtype=int)
-I_stdev = np.zeros(500, dtype=int)
+I = np.zeros(shape=(100,500), dtype=float)
+I_means = np.zeros(100, dtype=float)
+I_stdev = np.zeros(100, dtype=float)
 
 #looping through N set to compute I, means, and std dev
-for i in range(10):
-
+for i in range(100):
+    
     # run monte carlo method 500 times with N random variables
     for trial in range(500):
 
@@ -199,19 +174,17 @@ for i in range(10):
         randNum = np.random.rand(Nset[i], 2)
 
         #append I value to list
-        I[i,trial] = my_Monte_Carlo(randNum) 
+        I[i,trial] = my_Monte_Carlo(randNum)
     
-    #calculate means and standard deviations
-    I_means[i] = np.mean( I[i,:] )
-    I_stdev[i] = np.std( I[i,:] )
-    
-
 plt.figure(1)
-plt.semilogx(Nset, I[:,0], 'kx')
-#plt.semilogx(Nset, n, 'b', label = 'mean')
-#plt.semilogx(Nset, np.mean + np.std(I,1), 'r', label = 'mean +/- std')
-#plt.semilogx(Nset, np.mean(I) - np.std(I,1), 'r')
+plt.semilogx(Nset, I, 'kx')
+plt.semilogx(Nset, np.mean(I,1), 'b', label = 'mean')
+plt.semilogx(Nset, np.mean(I,1) + np.std(I,1), 'r', label = 'mean +/- std')
+plt.semilogx(Nset, np.mean(I,1) - np.std(I,1), 'r')
 plt.xlabel('number of samples')
 plt.ylabel('estimated integral')
+plt.legend()
+plt.grid(True)
+plt.savefig('Number5.png', bbox_inches='tight')
 plt.show()
 #6
