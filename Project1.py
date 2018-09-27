@@ -8,37 +8,36 @@ import matplotlib.pyplot as plt
 #FUNCTIONS
 def my_h2_function(x):
 
-    output = []
-    #loop through all of the vectors
-    for cor in x:
+    #splitting x and y coordinates apart
+    x_cor = x[:,0]
+    y_cor = x[:,1]
 
-        #calculate value for coordinate and then append it to list
-        val = math.pow(cor[0], 2) + math.pow(cor[1],2)
-        output.append(val)
+
+    #calculate value for coordinate and then append it to list
+    output = np.power(x_cor,2)+ np.power(y_cor,2)
 
     return output
 
 def my_h_function(x):
 
-    output = []
-    #loop through all of the vectors
-    for cor in x:
+    #splitting into x and y coordinates
+    x_cor = x[:,0]
+    y_cor = x[:,1]
 
-        #calculate value for coordinate and then append it to list
-        val = math.pow(cor[0], 3) + math.pow(cor[1], 2) + 2 * cor[0]*cor[1] - math.sin(cor[0]) + math.cos(2 * math.pi * cor[0] * cor[1] ) - 1
-        output.append(val)
+    #use numpy operations to calculate h function 
+    output = np.power(x_cor, 3) + np.power(y_cor, 2) + 2 * x_cor * y_cor - np.sin(x_cor) + np.cos(2 * np.pi * x_cor * y_cor ) - 1
 
     return output
 
 def my_g_function(x):
 
-    output = []
-    #loop through all of the vectors
-    for cor in x:
-
-        val = (1 / (2 * math.pi) ) * math.exp( -(math.pow(cor[0], 2) + math.pow(cor[1], 2) ) / 2 )
-        output.append(val)
-
+    #splitting into x and y coordinates
+    x_cor = x[:,0]
+    y_cor = x[:,1]
+    
+    #use numpy operations to calculate g function 
+    output = (1 / (2 * np.pi) ) * np.exp( (-1) * (np.power(x_cor, 2) + np.power(y_cor, 2) ) / 2 )
+    
     return output
 
 
@@ -97,7 +96,7 @@ def plot_scatter(x):
 
 def my_Monte_Carlo(x):
 
-    #calculate the g and h values 
+        #calculate the g and h values 
         h = my_h_function(x)
         g = my_g_function(x)
 
@@ -119,7 +118,7 @@ def my_Monte_Carlo(x):
 
 def my_Monte_Carlo_forCircle(x):
 
-    #calculate the g and h values 
+        #calculate the g and h values 
         h = my_h2_function(x)
         g = 1
 
@@ -148,7 +147,30 @@ x = np.random.rand(1000,2) # a vector of N two - dimensionalcoordinates in the r
 plot_scatter(x)
 
 #3
+Z= my_Monte_Carlo(x)
+print("Estimation of I using monte carlo method: ", Z)
 
-I = my_Monte_Carlo(x)
-
+#4
 X = my_Monte_Carlo_forCircle(x)
+print("Estimation of pi using monte carlo method: ", X)
+
+#5 
+I = np.array([])
+
+
+#run monte carlo method 500 times 
+for i in range(0, 500):
+    
+    #draw a new set of 1000 random coordinate [0,1]^2
+    randNum = np.random.rand(1000, 2) 
+
+    #computer monte carlo method and add it to numpy array for taking mean and standard deviation later
+    I = np.append(I, my_Monte_Carlo(x) )
+
+#take mean and standard deviation of I
+mean = np.mean(I)
+stdev = np.std(I)
+print("Mean of random variable I: ", mean)
+print("Standard deviation of random variable I: ", stdev)
+
+
